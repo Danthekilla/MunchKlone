@@ -1,0 +1,35 @@
+﻿<RecentFiles>
+  <RecentFiles>
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/f:Program.cs" caret="323" fromTop="14" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:Asset.cs" caret="2236" fromTop="16" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:Discard.cs" caret="2211" fromTop="42" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:Deck.cs" caret="2590" fromTop="15" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:View/f:Background.cs" caret="0" fromTop="0" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:Button.cs" caret="686" fromTop="12" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:GameOverStatSet.cs" caret="1438" fromTop="30" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:PlayingField.cs" caret="1650" fromTop="21" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Control/f:ButtonHandler.cs" caret="0" fromTop="0" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:Player.cs" caret="0" fromTop="0" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:PlayerStat.cs" caret="336" fromTop="14" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Control/f:BoardUpdater.cs" caret="1182" fromTop="3" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Control/f:CardController.cs" caret="0" fromTop="0" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Control/f:CommunicationController.cs" caret="1215" fromTop="36" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Control/f:DatabaseController.cs" caret="6785" fromTop="29" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:View/f:Game1.cs" caret="32917" fromTop="23" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:View/f:Menu.cs" caret="1879" fromTop="11" />
+  </RecentFiles>
+  <RecentEdits>
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:Asset.cs" caret="2236" fromTop="16" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:Discard.cs" caret="2211" fromTop="36" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Control/f:ButtonHandler.cs" caret="3737" fromTop="45" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Control/f:CommunicationController.cs" caret="1034" fromTop="16" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:PlayerStat.cs" caret="333" fromTop="12" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:Button.cs" caret="686" fromTop="12" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:GameOverStatSet.cs" caret="1438" fromTop="30" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Control/f:DatabaseController.cs" caret="6721" fromTop="28" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:PlayingField.cs" caret="1649" fromTop="30" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Model/f:Player.cs" caret="9013" fromTop="33" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:Control/f:BoardUpdater.cs" caret="1182" fromTop="3" />
+    <File id="FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4/d:View/f:Game1.cs" caret="32917" fromTop="23" />
+  </RecentEdits>
+</RecentFiles>

@@ -1,0 +1,112 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+
+namespace Munchkin
+{
+    class PlayingField
+    {
+        private List<Card> cards;
+        private Vector2 position;
+
+        public PlayingField()
+        {
+            this.cards = new List<Card>();
+            this.position = new Vector2(400, 555);
+        }
+
+        public void Add(Card c)
+        {
+            c.Commands = new List<String>() {"Add To Hand", "Discard", "Clear Playing Field"};
+            this.cards.Add(c);
+        }
+
+        public void ClearPlayingField(Discard doorDiscard, Discard treasureDiscard)
+        {
+            foreach (Card c in cards)
+            {
+                if (c.Type.Equals("Door"))
+                {
+                    doorDiscard.Add(c);
+                }
+                if(c.Type.Equals("Treasure"))
+                {
+                    treasureDiscard.Add(c);
+                }
+            }
+            cards.Clear();
+        }
+
+        public bool ContainsCard(int cardID)
+        {
+            foreach (Card c in cards)
+            {
+                if (c.ID == cardID)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public Card GetCard(int cardID)
+        {
+            foreach (Card c in cards)
+            {
+                if (c.ID == cardID)
+                {
+                    return c;
+                }
+            }
+            return null;
+        }
+
+        public Card RemoveCard(int cardID)
+        {
+            foreach (Card c in cards)
+            {
+                if (c.ID == cardID)
+                {
+                    cards.Remove(c);
+                    return c;
+                }
+            }
+            return null;
+        }
+
+        public Card ClickedACard(MouseState last, MouseState current)
+        {
+            foreach (Card c in cards)
+            {
+                if (c.IsClicked(last, current))
+                {
+                    return c;
+                }
+            }
+            return null;
+        }
+
+        public void Update()
+        {
+            Vector2 currentPosition = position;
+            foreach (Card c in cards)
+            {
+                c.Position = currentPosition;
+                c.ClickableArea = new Microsoft.Xna.Framework.Rectangle((int)currentPosition.X, (int)currentPosition.Y, 80, 120);
+                currentPosition.X += 80;
+            }
+        }
+
+        public void Draw(SpriteBatch sb)
+        {
+            foreach (Card c in cards)
+            {
+                sb.Draw(c.MediumFrontImage, c.ClickableArea, Color.White);
+            }
+        }
+    }
+}

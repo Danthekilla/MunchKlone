@@ -1,0 +1,214 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.Xna.Framework.Graphics;
+using System.IO;
+using Microsoft.Xna.Framework.Net;
+
+namespace Munchkin.Control
+{
+    class BoardUpdater
+    {
+        public static List<Deck> UpdateLocalDecks(Deck masterDeck, GraphicsDevice gd, PacketReader packetReader)
+        {
+            List<Deck> returnList = new List<Deck>();
+            Texture2D doorTexture;
+            using (FileStream fileStream = new FileStream(@"..\..\..\..\MunchkinContent\Cards\Door.png", FileMode.Open))
+            {
+                doorTexture = Texture2D.FromStream(gd, fileStream);
+            }
+
+            Texture2D treasureTexture;
+            using (FileStream fileStream = new FileStream(@"..\..\..\..\MunchkinContent\Cards\Treasure.png", FileMode.Open))
+            {
+                treasureTexture = Texture2D.FromStream(gd, fileStream);
+            }
+
+            Microsoft.Xna.Framework.Rectangle doorRect = new Microsoft.Xna.Framework.Rectangle(585, 350, 80, 120);
+            Microsoft.Xna.Framework.Rectangle treasureRect = new Microsoft.Xna.Framework.Rectangle(855, 350, 80, 120);
+
+            String[] command1 = packetReader.ReadString().Split(',');
+            String[] command2 = packetReader.ReadString().Split(',');
+
+            List<Card> cards1 = new List<Card>();
+            List<Card> cards2 = new List<Card>();
+
+            for (int i = 0; i < command1.Length; i++)
+            {
+                for (int j = 0; j < masterDeck.Cards.Count; j++)
+                {
+                    if (masterDeck.Cards[j].ID == Convert.ToInt32(command1[i]))
+                    {
+                        cards1.Add(masterDeck.Cards[j]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < command2.Length; i++)
+            {
+                for (int j = 0; j < masterDeck.Cards.Count; j++)
+                {
+                    if (masterDeck.Cards[j].ID == Convert.ToInt32(command2[i]))
+                    {
+                        cards2.Add(masterDeck.Cards[j]);
+                    }
+                }
+            }
+
+            Deck doorDeck = new Deck(cards1, doorTexture, doorRect);
+            doorDeck.Commands = new List<String>() { "Draw Face Up", "Add To Hand", "Discard", "Add To Playing Field" };
+            Deck treasureDeck = new Deck(cards2, treasureTexture, treasureRect);
+            treasureDeck.Commands = new List<String>() { "Draw Face Up", "Add To Hand", "Discard", "Add To Treasure Pool" };
+            returnList.Add(doorDeck);
+            returnList.Add(treasureDeck);
+
+            return returnList;
+        }
+
+        public static void UpdateBoardAfterPlayerAction(String command, Deck doorDeck, Deck treasureDeck, Deck masterDeck, Discard doorDiscard, Discard treasureDiscard, List<Player> players, Player player, PlayingField pf)
+        {
+            String[] commandargs = command.Split(',');
+            String senderTag = commandargs[0];
+            Card c = FindCard(Convert.ToInt32(commandargs[1]), doorDeck, treasureDeck, doorDiscard, treasureDiscard, players, commandargs[0], commandargs[2], pf);
+            
+                switch (commandargs[2])
+            {
+                case "Add To Hand":
+                    foreach (Player p in players)
+                    {
+                        if (p.Gamertag.Equals(senderTag))
+                        {
+                            if (c != null)
+                            {
+                                p.AddCardToHand(c);
+                            }
+                        }
+                    }
+                    break;
+                case "Draw Face Up":
+                    if (c != null)
+                    {
+                        pf.Add(c);
+                    }
+                    break;
+                case "Discard":
+                    if (c != null)
+                    {
+                        if (c.Type.Equals("Door"))
+                        {
+                            doorDiscard.Add(c);
+                        }
+                        else if (c.Type.Equals("Treasure"))
+                        {
+                            treasureDiscard.Add(c);
+                        }
+                    }
+                    break;
+                case "Add To Playing Field":
+                    if (c != null)
+                    {
+                        pf.Add(c);
+                    }
+                    break;
+                case "Clear Playing Field":
+                    pf.ClearPlayingField(doorDiscard, treasureDiscard);
+                    break;
+                case "Add To BackPack":
+                    foreach (Player p in players)
+                    {
+                        if (p.Gamertag.Equals(senderTag))
+                        {
+                            if (c != null)
+                            {
+                                p.AddCardToBackPack(c);
+                            }
+                        }
+                    }
+                    break;
+                case "Add To Equipped":
+                    foreach (Player p in players)
+                    {
+                        if (p.Gamertag.Equals(senderTag))
+                        {
+                            if (c != null)
+                            {
+                                p.AddCardToEquipped(c);
+                            }
+                        }
+                    }
+                    break;
+
+            }
+        }
+
+        private static Card FindCard(int cardID, Deck doorDeck, Deck treasureDeck, Discard doorDiscard, Discard treasureDiscard, List<Player> players, String senderGamertag, String command, PlayingField pf)
+        {
+            foreach (Player p in players)
+            {
+                    if (p.HasCard(cardID))
+                    {
+                        return p.RemoveCard(cardID);
+                    }
+            }
+            if (doorDeck.ContainsCard(cardID))
+            {
+                return doorDeck.RemoveCard(cardID);
+            }
+            if (treasureDeck.ContainsCard(cardID))
+            {
+                return treasureDeck.RemoveCard(cardID);
+            }
+            if(pf.ContainsCard(cardID))
+            {
+                if(command.Equals("Add To Hand"))
+                {
+                    Card c = pf.RemoveCard(cardID);
+                    pf.ClearPlayingField(doorDiscard, treasureDiscard);
+                    return c;
+                }
+                else
+                {
+                   return pf.GetCard(cardID); 
+                }
+                
+            }
+            if(doorDiscard.ContainsCard(cardID))
+            {
+                return doorDiscard.RemoveCard(cardID);
+            }
+            if(treasureDiscard.ContainsCard(cardID))
+            {
+                return treasureDiscard.RemoveCard(cardID);
+            }
+            return null;
+        }
+
+        private static Player GetSendingPlayer(List<Player> players, String gamertag)
+        {
+            foreach (Player theplayer in players)
+            {
+                if (theplayer.Gamertag.Equals(gamertag))
+                {
+                    return theplayer;
+                }
+            }
+            return null;
+        }
+
+        public static String UpdateLevels(List<Player> players )
+        {
+            String gamertag = CommunicationController.packetReader.ReadString();
+            String level = CommunicationController.packetReader.ReadString();
+
+            foreach (Player p in players)
+            {
+                if(p.Gamertag.Equals(gamertag))
+                {
+                    p.Level = Convert.ToInt32(level);
+                }
+            }
+            return gamertag;
+        }
+    }
+}

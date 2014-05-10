@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Munchkin", "Munchkin\Munchkin\Munchkin.csproj", "{FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MunchkinContent", "Munchkin\MunchkinContent\MunchkinContent.contentproj", "{159645F9-F3A4-4C71-B7E2-1E04B764EB27}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4}.Debug|x86.ActiveCfg = Debug|x86
+		{FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4}.Debug|x86.Build.0 = Debug|x86
+		{FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4}.Release|x86.ActiveCfg = Release|x86
+		{FFAD82F2-A3A6-4CC2-BE02-461B564FB8B4}.Release|x86.Build.0 = Release|x86
+		{159645F9-F3A4-4C71-B7E2-1E04B764EB27}.Debug|x86.ActiveCfg = Debug|x86
+		{159645F9-F3A4-4C71-B7E2-1E04B764EB27}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

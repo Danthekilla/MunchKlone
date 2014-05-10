@@ -1,0 +1,989 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Net;
+using System.IO;
+
+namespace Munchkin
+{
+    /// <summary>
+    /// This is the main type for your game
+    /// </summary>
+    public class Game : Microsoft.Xna.Framework.Game
+    {
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+        //Current state our game is in when started at Main Menu
+        GameState gameState = GameState.MainMenu;
+
+        //The messages to display on the screen.
+        //We will use this to show events that occur like
+        //a player joining a session.
+        List<DisplayMessage> gameMessages = new List<DisplayMessage>();
+        Deck doorDeck;
+        Deck treasureDeck;
+        Card currentDoor;
+        int doorCardIndex = 0;
+
+        Card currentTreasure;
+        int treasureCardIndex = 0;
+
+        int menuIndex = 0;
+
+        SpriteFont spriteFont;
+        SpriteFont textFont;
+        SpriteFont nameFont;
+        Background bg;
+        GamePadState currentGamePadState;
+        GamePadState lastGamePadState;
+        KeyboardState currentKeyState;
+        KeyboardState lastKeyState;
+        MouseState currentMouseState;
+        MouseState lastMouseState;
+        Random random = new Random();
+        //The network session for the game
+        NetworkSession networkSession;
+
+        Texture2D testCard;//Test card for player positioning, and testing card in hand.
+        Player player;//Represent local player 1. 
+        Player player2;//Represents player 2
+        Player player3;//... 3
+        Player player4;//... 4
+        List<Player> remotePlayers;
+
+        //PacketWriter and PacketReader used to send and recieve game data
+        PacketWriter packetWriter = new PacketWriter();
+        PacketReader packetReader = new PacketReader();
+
+        //List of sessions that you can join
+        AvailableNetworkSessionCollection availableSessions;
+
+        string text = "";
+        List<string> chatBoxText = new List<string>();
+
+        Keys[] keysToCheck = new Keys[] { 
+            Keys.A, Keys.B, Keys.C, Keys.D, Keys.E,
+            Keys.F, Keys.G, Keys.H, Keys.I, Keys.J,
+            Keys.K, Keys.L, Keys.M, Keys.N, Keys.O,
+            Keys.P, Keys.Q, Keys.R, Keys.S, Keys.T,
+            Keys.U, Keys.V, Keys.W, Keys.X, Keys.Y,
+            Keys.Z, Keys.Back, Keys.Space, Keys.Enter,
+            Keys.OemBackslash, Keys.OemComma, Keys.OemMinus, Keys.OemPlus,
+        Keys.OemQuestion, Keys.OemQuotes, Keys.OemSemicolon, Keys.Subtract,
+        Keys.Multiply, Keys.Divide, Keys.Decimal, Keys.Add, Keys.D0, Keys.D1,
+        Keys.D2, Keys.D3, Keys.D4, Keys.D5,Keys.D6,Keys.D7,Keys.D8, Keys.D9, 
+        Keys.OemOpenBrackets, Keys.OemCloseBrackets, Keys.OemPeriod};
+
+        Texture2D chatRectangle, chatOutline, fieldSeperator;
+
+        public Game()
+        {
+
+            graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
+            Content.RootDirectory = "Content";
+
+            //Initialize GamerServices
+
+            Components.Add(new GamerServicesComponent(this));
+        }
+
+        //Different states the game can be in
+        public enum GameState { MainMenu, CreateSession, FindSession, GameLobby, PlayingGame };
+
+        //Different game types the game can have
+        public enum GameType { Match };
+
+        //Properties of a game session
+        public enum SessionProperties { GameType, OtherCustomProperty };
+
+        //Structure used to display game messages over a TimeSpan
+        public struct DisplayMessage
+        {
+            public string Message;
+            public TimeSpan DisplayTime;
+
+            public DisplayMessage(string message, TimeSpan displayTime)
+            {
+                Message = message;
+                DisplayTime = displayTime;
+            }
+        }
+
+
+        /// <summary>
+        /// Allows the game to perform any initialization it needs to before starting to run.
+        /// This is where it can query for any required services and load any non-graphic
+        /// related content.  Calling base.Initialize will enumerate through any components
+        /// and initialize them as well.
+        /// </summary>
+        protected override void Initialize()
+        {
+            // TODO: Add your initialization logic here
+            bg = new Background();
+            player = new Player();
+            player.position = new Vector2(0, 600);
+            currentKeyState = new KeyboardState();
+            currentMouseState = Mouse.GetState();
+            base.Initialize();
+            List<Deck> initialDecks = CardController.CreateDeck(graphics.GraphicsDevice);
+            doorDeck = initialDecks[0];
+            treasureDeck = initialDecks[1];   
+        }
+
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
+        protected override void LoadContent()
+        {
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteFont = Content.Load<SpriteFont>("SpriteFont1");
+            textFont = Content.Load<SpriteFont>("SpriteFont2");
+            nameFont = Content.Load<SpriteFont>("NameFont");
+            //Felt Background image retrieved from: http://blinds-wallpaper.net/wallpaper/CONTACT-PAPER/VELOUR-FELT/Green-Billiards-Velour-Felt-Contact-Paper/prod_13816.html
+            bg.Initialize(Content.Load<Texture2D>("felt_bg"), new Vector2(0, 0), this.GraphicsDevice.Viewport.Width, this.GraphicsDevice.Viewport.Height);
+
+            chatRectangle = new Texture2D(GraphicsDevice, 1, 1);
+            chatRectangle.SetData(new[] { Color.White });
+
+            chatOutline = new Texture2D(GraphicsDevice, 1, 1);
+            chatOutline.SetData(new[] { Color.Silver });
+
+            fieldSeperator = new Texture2D(GraphicsDevice, 1, 1);
+            fieldSeperator.SetData(new[] { Color.SlateGray });
+            // TODO: use this.Content to load your game content here
+        }
+
+        /// <summary>
+        /// UnloadContent will be called once per game and is the place to unload
+        /// all content.
+        /// </summary>
+        protected override void UnloadContent()
+        {
+            // TODO: Unload any non ContentManager content here
+            chatRectangle.Dispose();
+            chatOutline.Dispose();
+        }
+
+        /// <summary>
+        /// Allows the game to run logic such as updating the world,
+        /// checking for collisions, gathering input, and playing audio.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Update(GameTime gameTime)
+        {
+            this.IsMouseVisible = true;
+            //Store the current Keyboard State
+            lastKeyState = currentKeyState;
+            currentKeyState = Keyboard.GetState();
+
+            // Allows the game to exit
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                this.Exit();
+            if (currentKeyState.IsKeyDown(Keys.Escape))
+                this.Exit();
+
+            lastMouseState = currentMouseState;
+            currentMouseState = Mouse.GetState();
+
+            //If there is no user signed in after 5 seconds
+            //then we show the sign in
+            if (gameTime.TotalGameTime.Seconds > 5)
+            {
+                if (Gamer.SignedInGamers.Count == 0 && !Guide.IsVisible)
+                    Guide.ShowSignIn(1, false);
+            }
+
+
+
+            //Switch to determine which update method to call
+            //based on the current game state
+            switch (gameState)
+            {
+                case GameState.MainMenu:
+                    MainMenuUpdate();
+                    break;
+                case GameState.CreateSession:
+                    CreateSessionUpdate();
+                    break;
+                case GameState.GameLobby:
+                    GameLobbyUpdate();
+                    break;
+                case GameState.PlayingGame:
+                    PlayingGameUpdate(gameTime);
+                    break;
+                case GameState.FindSession:
+                    FindSessionUpdate();
+                    break;
+            }
+
+            //Store the current GamePadState
+            currentGamePadState = GamePad.GetState(PlayerIndex.One);
+            //Store the game pad state for next frame
+            lastGamePadState = currentGamePadState;
+
+            //Update the DisplayTime of current display message
+            if (gameMessages.Count > 0)
+            {
+                DisplayMessage currentMessage = gameMessages[0];
+                currentMessage.DisplayTime -= gameTime.ElapsedGameTime;
+
+                //Remove the message if the time is up
+                if (currentMessage.DisplayTime <= TimeSpan.Zero)
+                {
+                    gameMessages.RemoveAt(0);
+                }
+                else
+                {
+                    gameMessages[0] = currentMessage;
+                }
+            }
+
+            //Update the network session we need to check to
+            //see if it is disposed since calling update
+            //on a displosed NetworkSession will throw an exception
+            if (networkSession != null && !networkSession.IsDisposed)
+                networkSession.Update();
+
+            base.Update(gameTime);
+        }
+
+        //Update method for the FindSession GameState
+        private void FindSessionUpdate()
+        {
+            //Go back to the main menu
+            if (ButtonPressed(Buttons.Back) || KeyPressed(Keys.Left))
+                gameState = GameState.MainMenu;
+            //If the user presses the A button, join the first session
+            else if ((ButtonPressed(Buttons.A) || KeyPressed(Keys.A)) && availableSessions.Count != 0)
+                JoinSession(0);
+        }
+
+        //Creates a session using an AvailableNetworkSession index
+        private void JoinSession(int sessionID)
+        {
+            //Join an existing NetworkSession
+            try
+            {
+                networkSession = NetworkSession.Join(availableSessions[sessionID]);
+            }
+            catch (NetworkSessionJoinException ex)
+            {
+                gameMessages.Add(new DisplayMessage("Failed to connect to session: " + ex.JoinError.ToString(),
+                    TimeSpan.FromSeconds(2)));
+
+                //Check for Sessions again
+                FindSession();
+            }
+
+            //Register for NetworkSessionEvents
+            networkSession.GameStarted +=
+                new EventHandler<GameStartedEventArgs>(networkSession_GameStarted);
+            networkSession.GameEnded +=
+                new EventHandler<GameEndedEventArgs>(networkSession_GameEnded);
+            networkSession.GamerJoined +=
+                new EventHandler<GamerJoinedEventArgs>(networkSession_GamerJoined);
+            networkSession.GamerLeft +=
+                new EventHandler<GamerLeftEventArgs>(networkSession_GamerLeft);
+            networkSession.SessionEnded +=
+                new EventHandler<NetworkSessionEndedEventArgs>(networkSession_SessionEnded);
+
+            //Set the correct GameState. The NetworkSession may have already started a game
+            if (networkSession.SessionState == NetworkSessionState.Playing)
+                gameState = GameState.PlayingGame;
+            else
+                gameState = GameState.GameLobby;
+        }
+
+        //Update method for the PlayingGame GameState
+        private void PlayingGameUpdate(GameTime gameTime)
+        {
+
+
+            //Check to see if the player wants to quit
+            if (ButtonPressed(Buttons.Back) || KeyPressed(Keys.Escape))
+            {
+                //If the player is the host then the game is exited
+                //but the session stays alive
+                if (networkSession.IsHost)
+                    networkSession.EndGame();
+                //Other players leave the session
+                else
+                {
+                    networkSession.Dispose();
+                    networkSession = null;
+                    gameState = GameState.MainMenu;
+                }
+                return;
+            }
+            if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+            {
+                if (doorDeck.ClickableArea.Contains(new Point(currentMouseState.X, currentMouseState.Y)))
+                {
+                    doorCardIndex++;
+                    if (doorCardIndex >= doorDeck.Cards.Count - 1)
+                    {
+                        doorCardIndex = 0;
+                    }
+                    currentDoor = doorDeck.Cards[doorCardIndex];
+                    packetWriter.Write(doorDeck.StreamImage(doorCardIndex));
+                    packetWriter.Write(false); //1 byte value. false if door card.
+                    SendInput();
+
+                }
+                if (treasureDeck.ClickableArea.Contains(new Point(currentMouseState.X, currentMouseState.Y)))
+                {
+                    treasureCardIndex++;
+                    if (treasureCardIndex >= treasureDeck.Cards.Count - 1)
+                    {
+                        treasureCardIndex = 0;
+                    }
+                    currentTreasure = treasureDeck.Cards[treasureCardIndex];
+                    packetWriter.Write(treasureDeck.StreamImage(treasureCardIndex));
+                    packetWriter.Write(true); //1 byte value. true if treasure card.
+                    SendInput();
+                }
+            }
+
+            currentKeyState = Keyboard.GetState();
+
+            foreach (Keys key in keysToCheck)
+            {
+                if (CheckKey(key, gameTime))
+                {
+                    AddKeyToText(key, gameTime);
+                    break;
+                }
+            }
+
+            base.Update(gameTime);
+
+            lastKeyState = currentKeyState;
+
+            ReceiveNetworkData(gameTime);
+            //Use the Gamepad/Keyboard to update the position of the local gamers
+            //Loop all of the local gamers
+
+
+        }
+
+        private void AddKeyToText(Keys key, GameTime gameTime)
+        {
+            string newChar = "";
+
+            switch (key)
+            {
+                case Keys.A: newChar += "a"; break;case Keys.B: newChar += "b"; break;
+                case Keys.C: newChar += "c"; break;case Keys.D: newChar += "d"; break;
+                case Keys.E: newChar += "e"; break;case Keys.F: newChar += "f"; break;
+                case Keys.G: newChar += "g"; break;case Keys.H: newChar += "h"; break;
+                case Keys.I: newChar += "i"; break;case Keys.J: newChar += "j"; break;
+                case Keys.K: newChar += "k"; break;case Keys.L: newChar += "l"; break;
+                case Keys.M: newChar += "m"; break;case Keys.N: newChar += "n"; break;
+                case Keys.O: newChar += "o"; break;case Keys.P: newChar += "p"; break;
+                case Keys.Q: newChar += "q"; break;case Keys.R: newChar += "r"; break;
+                case Keys.S: newChar += "s"; break;case Keys.T: newChar += "t"; break;
+                case Keys.U: newChar += "u"; break;case Keys.V: newChar += "v"; break;
+                case Keys.W: newChar += "w"; break;case Keys.X: newChar += "x"; break;
+                case Keys.Y: newChar += "y"; break;case Keys.Z: newChar += "z"; break;
+                case Keys.D0: newChar += "0"; break;case Keys.D1: newChar += "1"; break;
+                case Keys.D2: newChar += "2"; break;case Keys.D3: newChar += "3"; break;
+                case Keys.D4: newChar += "4"; break;case Keys.D5: newChar += "5"; break;
+                case Keys.D6: newChar += "6"; break;case Keys.D7: newChar += "7"; break;
+                case Keys.D8: newChar += "8"; break;case Keys.D9: newChar += "9"; break;
+                case Keys.Add: newChar += "+"; break;case Keys.OemPlus: newChar += "+"; break;
+                case Keys.OemMinus: newChar += "-"; break;case Keys.Subtract: newChar += "-"; break;
+                case Keys.Multiply: newChar += "*"; break;case Keys.Divide: newChar += "/"; break;
+                case Keys.OemSemicolon: newChar += ";"; break;case Keys.OemBackslash: newChar += "\\"; break;
+                case Keys.OemComma: newChar += ","; break;case Keys.OemQuestion: newChar += "?"; break;
+                case Keys.Decimal: newChar += "."; break;case Keys.OemQuotes: newChar += "\""; break;
+                case Keys.OemPeriod: newChar += "."; break;case Keys.Space: newChar += " "; break;
+                case Keys.OemOpenBrackets: newChar += "["; break;
+                case Keys.OemCloseBrackets: newChar += "]"; break;
+                case Keys.Back:
+                    if (text.Length != 0)
+                    {
+                        text = text.Remove(text.Length - 1);
+
+                    }
+                    return;
+                case Keys.Enter:
+                    if (text.Length != 0)
+                    {
+                        string combinedText = networkSession.LocalGamers[0].Gamertag + ": " + text;
+
+                        foreach (LocalNetworkGamer gamer in networkSession.LocalGamers)
+                        {
+                            packetWriter.Write(combinedText);
+                            gamer.SendData(packetWriter, SendDataOptions.None);
+                        }
+
+                        text = text.Remove(0);
+                    }
+                    return;
+            }
+            if (currentKeyState.IsKeyDown(Keys.RightShift) ||
+                currentKeyState.IsKeyDown(Keys.LeftShift))
+            {
+                newChar = newChar.ToUpper();
+            }
+            text += newChar;
+        }
+
+        private bool CheckKey(Keys theKey, GameTime gameTime)
+        {
+            if (lastKeyState.IsKeyDown(theKey) && currentKeyState.IsKeyUp(theKey))
+                return true;
+            else
+                return false;
+        }
+
+        private void SendInput()
+        {
+            LocalNetworkGamer gamer = networkSession.LocalGamers[0];
+            gamer.SendData(packetWriter, SendDataOptions.InOrder);
+        }
+
+        //Network Data reciever method.
+        private void ReceiveNetworkData(GameTime gameTime)
+        {
+            LocalNetworkGamer gamer = networkSession.LocalGamers[0];
+
+            while (gamer.IsDataAvailable)
+            {
+                NetworkGamer sender;
+                gamer.ReceiveData(packetReader, out sender);
+
+                //Ignore if sender is local player
+                if (!sender.IsLocal)
+                {
+                    
+                    byte[] cardStream = packetReader.ReadBytes(packetReader.Length -1);
+                    bool isTreasure = packetReader.ReadBoolean();
+                    System.Drawing.Image cImg = (System.Drawing.Image)ReceiveImage(cardStream);
+                    if (!isTreasure) 
+                    {
+                        currentDoor.MediumImage = CardController.FormatImage(cImg, graphics.GraphicsDevice, 80, 120);
+                    }
+                    else
+                    {
+                        currentTreasure.MediumImage = CardController.FormatImage(cImg, graphics.GraphicsDevice, 80, 120);
+                    }
+
+                }
+
+                string receivedText = packetReader.ReadString();
+                int lineNum = 0;
+                string tempText = "";
+                if (receivedText.Length > 34)
+                {
+                    lineNum = (receivedText.Length / 34);
+
+                    for (int current = 0; current <= lineNum; current++)
+                    {
+                        tempText = "";
+                        if (current != lineNum)
+                        {
+                            tempText = receivedText.Substring(0 + (34 * current), 34);
+                            chatBoxText.Add(tempText);
+                        }
+                        else
+                        {
+                            int mod = receivedText.Length % 34;
+                            tempText = receivedText.Substring(0 + (34 * current), mod);
+                            chatBoxText.Add(tempText);
+                        }
+
+                    }
+                }
+                else
+                    chatBoxText.Add(receivedText);
+
+                base.Update(gameTime);
+            }
+        }
+
+        public System.Drawing.Image ReceiveImage(Byte[] imageData)
+        {
+            MemoryStream stream = new MemoryStream(imageData);
+            System.Drawing.Image cImage = System.Drawing.Image.FromStream(stream);
+            stream.Flush();
+            return cImage;
+        }
+
+        //Update method for the GameLobby GameState
+        private void GameLobbyUpdate()
+        {
+            //Move back to the main menu
+            if (ButtonPressed(Buttons.Back) || KeyPressed(Keys.Left))
+            {
+                networkSession.Dispose();
+                gameState = GameState.MainMenu;
+            }
+            //Set the ready state for the player
+            else if (ButtonPressed(Buttons.A) || KeyPressed(Keys.A))
+                networkSession.LocalGamers[0].IsReady = !networkSession.LocalGamers[0].IsReady;
+            //Only the host can start the game
+            else if ((ButtonPressed(Buttons.Start) || KeyPressed(Keys.Enter)) && networkSession.IsHost)
+                networkSession.StartGame();
+        }
+
+        //Update method for the create session method
+        private void CreateSessionUpdate()
+        {
+            if (ButtonPressed(Buttons.A) || KeyPressed(Keys.Enter))
+            {
+                switch (menuIndex)
+                {
+                    case 0:
+                        //Create a new session with different
+                        //using different values for GameType
+                        CreateSession(GameType.Match);
+                        menuIndex = 0;
+                        break;
+
+                    case 1:
+                        //Move back to the main menu
+                        gameState = GameState.MainMenu;
+                        menuIndex = 0;
+                        break;
+                }
+            }
+        }
+
+        private void PlayerUpdate(GameTime gameTime)
+        {
+            //player.Update(gameTime);
+            if (KeyPressed(Keys.Left))
+            {
+                player.ShiftHand();
+                
+            }
+
+        }
+
+        //Create a new NetworkSession
+        private void CreateSession(GameType gameType)
+        {
+            try
+            {
+                //if we have an existing network session, we need to dispose of it
+                if (networkSession != null && !networkSession.IsDisposed)
+                    networkSession.Dispose();
+
+                //Create the NetworkSessionProperties to use for the session
+                //Other players will use these to search for a session.
+                NetworkSessionProperties sessionProperties = new NetworkSessionProperties();
+                sessionProperties[(int)SessionProperties.GameType] = (int)gameType;
+                sessionProperties[(int)SessionProperties.OtherCustomProperty] = 42;
+
+                //Create the NetworkSession NetworkSessionType of SystemLink
+                networkSession = NetworkSession.Create(NetworkSessionType.SystemLink, 1, 4, 0, sessionProperties);
+                networkSession.AllowJoinInProgress = true;
+
+                //Register for NetworkSession events
+                networkSession.GameStarted +=
+                    new EventHandler<GameStartedEventArgs>(networkSession_GameStarted);
+                networkSession.GameEnded +=
+                    new EventHandler<GameEndedEventArgs>(networkSession_GameEnded);
+                networkSession.GamerJoined +=
+                    new EventHandler<GamerJoinedEventArgs>(networkSession_GamerJoined);
+                networkSession.GamerLeft +=
+                    new EventHandler<GamerLeftEventArgs>(networkSession_GamerLeft);
+                networkSession.SessionEnded +=
+                    new EventHandler<NetworkSessionEndedEventArgs>(networkSession_SessionEnded);
+
+                //Move the game into the GameLobby state
+                gameState = GameState.GameLobby;
+            }
+            catch(GamerPrivilegeException e)
+            {
+                System.Console.WriteLine(e.Message);
+                string error = String.Format("A signed in gamer profile is required to perform this operation. \n"
+                    + "There are no profiles currently signed in");
+                gameMessages.Add(new DisplayMessage(error, TimeSpan.FromSeconds(2)));
+            }
+        }
+
+        //Event handler for the NetworkSession.gameStarted event
+        //This event is fired when the host call NetworkSession.StartGame
+        void networkSession_GameStarted(object sender, GameStartedEventArgs e)
+        {
+            gameMessages.Add(new DisplayMessage("Game Started", TimeSpan.FromSeconds(2)));
+            //Move the game into the PlayingGame state
+            gameState = GameState.PlayingGame;
+        }
+
+        //Event handler for the NetworkSession.GameEnded event
+        //This event is fired when the host call NetworkSession.EndGame
+        void networkSession_GameEnded(object sender, GameEndedEventArgs e)
+        {
+            gameMessages.Add(new DisplayMessage("Game Ended", TimeSpan.FromSeconds(2)));
+            //Move the game into the GameLobby state
+            gameState = GameState.GameLobby;
+        }
+
+        //Event handler for the NetworkSession.GamerJoined event
+        //This event is fired when someone joins the session
+        //This event will fire even for local gamers
+        void networkSession_GamerJoined(object sender, GamerJoinedEventArgs e)
+        {
+            gameMessages.Add(new DisplayMessage("Gamer joined: " + e.Gamer.Gamertag, TimeSpan.FromSeconds(2)));
+            //Add a new GameObject that we will use to store game state for the player
+            //If the local gamer, it will display the player at the bottom of the screen
+            if (networkSession.LocalGamers[0] == e.Gamer)
+            {
+                player.Initialize(/*Content.Load<Texture2D>("player_test_card"),*/ new Vector2(460,570));
+                player.Hand.Add(doorDeck.Cards[0]);
+                player.Hand.Add(doorDeck.Cards[1]);
+                player.Hand.Add(doorDeck.Cards[2]);
+                player.Hand.Add(doorDeck.Cards[3]);
+                player.Hand.Add(doorDeck.Cards[4]);
+                //e.Gamer.Tag = new GameObject(new Vector2(640 - (e.Gamer.Gamertag.Length * 15), 680));
+                //e.Gamer.Tag = new GameObject(new Vector2(300, 50));
+                //e.Gamer.Tag = new GameObject(new Vector2(50, 200));
+                //e.Gamer.Tag = new GameObject(new Vector2(900, 200));
+            }
+            //If the 2nd player, it will display across the table from local player
+            else if (networkSession.RemoteGamers[0] == e.Gamer)
+            {
+                e.Gamer.Tag = new GameObject(new Vector2(300, 50));
+                player2 = new Player();
+                remotePlayers = new List<Player>();
+                remotePlayers.Add(player2);
+                player2.Initialize(new Vector2(460, 150));
+                player2.Hand.Add(doorDeck.Cards[5]);
+                player2.Hand.Add(doorDeck.Cards[6]);
+                player2.Hand.Add(doorDeck.Cards[7]);
+                player2.Hand.Add(doorDeck.Cards[8]);
+                player2.Hand.Add(doorDeck.Cards[9]);
+            }
+            //If player 3, it will display on the left side of the table.
+            else if (networkSession.RemoteGamers[1] == e.Gamer)
+            {
+                e.Gamer.Tag = new GameObject(new Vector2(50, 200));
+                player3 = new Player();
+                remotePlayers.Add(player3);
+                player3.Initialize(new Vector2(150, 285));
+                player3.Hand.Add(doorDeck.Cards[10]);
+                player3.Hand.Add(doorDeck.Cards[11]);
+                player3.Hand.Add(doorDeck.Cards[12]);
+                player3.Hand.Add(doorDeck.Cards[13]);
+                player3.Hand.Add(doorDeck.Cards[14]);
+            }
+            //If player 4 it will display on the right side of the table. 
+            else if (networkSession.RemoteGamers[2] == e.Gamer)
+            {
+                e.Gamer.Tag = new GameObject(new Vector2(900, 200));
+                player4 = new Player();
+                remotePlayers.Add(player4);
+                player4.Initialize(new Vector2(810, 285));
+                player4.Hand.Add(doorDeck.Cards[15]);
+                player4.Hand.Add(doorDeck.Cards[16]);
+                player4.Hand.Add(doorDeck.Cards[17]);
+                player4.Hand.Add(doorDeck.Cards[18]);
+                player4.Hand.Add(doorDeck.Cards[19]);
+            }
+        }
+
+        //Event handler for the NetworkSession.GamerLeft event
+        //This event is fired when a player leaves the session
+        void networkSession_GamerLeft(object sender, GamerLeftEventArgs e)
+        {
+            gameMessages.Add(new DisplayMessage("Gamer Left: " + e.Gamer.Gamertag, TimeSpan.FromSeconds(2)));
+        }
+
+        //Event handler for the NetworkSession.SessionEnded event
+        //This event is fired when your connection to the NetworkSession is ended
+        void networkSession_SessionEnded(object sender, NetworkSessionEndedEventArgs e)
+        {
+            gameMessages.Add(new DisplayMessage("Session Ended: " + e.EndReason.ToString(), TimeSpan.FromSeconds(2)));
+            //Since we have disconnected we clean up the NetworkSession
+            if (networkSession != null && !networkSession.IsDisposed)
+                networkSession.Dispose();
+
+            //Move the game into the MainMenu state
+            gameState = GameState.MainMenu;
+        }
+
+        //Update method for the MainMenu GameState
+        private void MainMenuUpdate()
+        {
+            if(ButtonPressed(Buttons.A) || KeyPressed(Keys.Enter))
+            {
+                switch (menuIndex)
+                {
+                    case 0:
+                        //Create a new session
+                        gameState = GameState.CreateSession;
+                        menuIndex = 0;
+                        break;
+                    case 1:
+                        //Find a session
+                        FindSession();
+                        menuIndex = 0;
+                        break;
+                    case 2:
+                        //Exit the game
+                        Exit();
+                        break;
+                }
+            }
+        }
+
+        //Method to start the search for a NetworkSession
+        private void FindSession()
+        {
+            //Dispose of any previous session
+            if (networkSession != null && !networkSession.IsDisposed)
+                networkSession.Dispose();
+
+            //Define the type of session we want to search for using the 
+            //NetworkSessionProperties.
+            //We only set the OtherCustomProperty
+            NetworkSessionProperties sessionProperties = new NetworkSessionProperties();
+            sessionProperties[(int)SessionProperties.OtherCustomProperty] = 42;
+
+            //Find an available NetworkSession
+            availableSessions = NetworkSession.Find(NetworkSessionType.SystemLink, 1, sessionProperties);
+
+            //Move the game into the FindSession state
+            gameState = GameState.FindSession;
+        }
+
+        //Helper to determine if a button was pressed but will
+        //not allow repeat presses over several frames
+        bool ButtonPressed(Buttons button)
+        {
+            //Dont process buttons when the guide is visible
+            if (Guide.IsVisible)
+                return false;
+            return currentGamePadState.IsButtonDown(button) && lastGamePadState.IsButtonUp(button);
+        }
+
+        bool KeyPressed(Keys key)
+        {
+            return currentKeyState.IsKeyDown(key) && lastKeyState.IsKeyUp(key);
+        }
+
+        /// <summary>
+        /// This is called when the game should draw itself.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            //Switch to call the correct draw method for the
+            //current game state
+            switch (gameState)
+            {
+                case GameState.MainMenu:
+                    MainMenuDraw();
+                    break;
+
+                case GameState.CreateSession:
+                    CreateSessionDraw();
+                    break;
+
+                case GameState.GameLobby:
+                    GameLobbyDraw();
+                    break;
+
+                case GameState.PlayingGame:
+                    PlayingGameDraw();
+                    break;
+
+                case GameState.FindSession:
+                    FindSessionDraw();
+                    break;
+            }
+
+            //Draw the current display message
+            if (gameMessages.Count > 0)
+            {
+                DisplayMessage currentMessage = gameMessages[0];
+
+                spriteBatch.Begin();
+                Vector2 stringSize = spriteFont.MeasureString(gameMessages[0].Message);
+                spriteBatch.DrawString(spriteFont, gameMessages[0].Message, new Vector2((1280 - stringSize.X) / 2.0f, 500), Color.White);
+                spriteBatch.End();
+            }
+
+            base.Draw(gameTime);
+        }
+
+        //Draw method for the FindSession GameState
+        private void FindSessionDraw()
+        {
+            spriteBatch.Begin();
+            spriteBatch.DrawString(spriteFont, "FIND SESSION", new Vector2(10, 10), Color.White);
+            spriteBatch.DrawString(spriteFont, "Exit - Press Left(Back)", new Vector2(10, 50), Color.White);
+
+            //Write message if there are no sessions found
+            if (availableSessions.Count == 0)
+            {
+                spriteBatch.DrawString(spriteFont, "NO SESSIONS FOUND", new Vector2(10, 90), Color.White);
+            }
+            else
+            {
+                //Print out a list of the available sessions
+                int sessionIndex = 0;
+                foreach (AvailableNetworkSession session in availableSessions)
+                {
+                    spriteBatch.DrawString(spriteFont, session.HostGamertag + " " +
+                        session.OpenPublicGamerSlots +
+                        ((sessionIndex == 0) ? " (PRESS A)" : ""),
+                        new Vector2(10, 90 + sessionIndex * 40), Color.White);
+                    sessionIndex++;
+                }
+            }
+            spriteBatch.End();
+        }
+
+        private void PlayingGameDraw()
+        {
+            spriteBatch.Begin();
+            bg.Draw(spriteBatch);
+            spriteBatch.Draw(fieldSeperator, new Rectangle(graphics.PreferredBackBufferWidth - 260, 0, 260, graphics.PreferredBackBufferHeight), Color.SlateGray);
+            DrawChatBox(spriteBatch);
+            //spriteBatch.DrawString(spriteFont, "PLAYING GAME", new Vector2(10, 10), Color.White);
+            //spriteBatch.DrawString(spriteFont, current.Name, new Vector2(400, 300), Color.White);
+            //spriteBatch.Draw(current.SmallImage, new Vector2(200,200), Color.White);
+
+            //spriteBatch.DrawString(spriteFont, current.Description, new Vector2(0, 400), Color.White);
+
+            spriteBatch.Draw(doorDeck.CoverImage, new Vector2(doorDeck.ClickableArea.X, doorDeck.ClickableArea.Y), Color.White);
+            spriteBatch.Draw(treasureDeck.CoverImage, new Vector2(treasureDeck.ClickableArea.X, doorDeck.ClickableArea.Y), Color.White);
+            if (currentDoor != null)
+            {
+                spriteBatch.Draw(currentDoor.MediumImage, new Vector2(doorDeck.ClickableArea.X + 90, doorDeck.ClickableArea.Y), Color.White);
+            }
+            if (currentTreasure != null)
+            {
+                spriteBatch.Draw(currentTreasure.MediumImage, new Vector2(treasureDeck.ClickableArea.X - 90, treasureDeck.ClickableArea.Y), Color.White);
+            }
+            //Draw each players name at their position in the game
+            player.Draw(spriteBatch);
+
+            if (networkSession.AllGamers.Count > 1)
+            {
+                foreach (Player p in remotePlayers)
+                {
+                    p.Draw(spriteBatch);
+                }
+
+                foreach (NetworkGamer networkGamer in networkSession.AllGamers)
+                {
+                    GameObject players = networkGamer.Tag as GameObject;
+
+                    spriteBatch.DrawString(nameFont, networkGamer.Gamertag, players.Position, Color.White);  // +
+                    //        ((networkGamer.IsHost) ? " (HOST)" : "") +
+                    //        ((networkGamer.IsTalking) ? "TALKING" : ""), players.Position, Color.White);
+                }
+            }
+            spriteBatch.End();
+        }
+
+        private void DrawChatBox(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(chatOutline, new Rectangle(graphics.PreferredBackBufferWidth-260, graphics.PreferredBackBufferHeight - 255, 260, 255), Color.SlateGray);
+            spriteBatch.Draw(chatRectangle, new Rectangle(graphics.PreferredBackBufferWidth-255, graphics.PreferredBackBufferHeight - 250, 250, 245), Color.White);
+            spriteBatch.Draw(chatOutline, new Rectangle(graphics.PreferredBackBufferWidth-255, graphics.PreferredBackBufferHeight - 25, 250, 2), Color.Silver);
+
+            string tempText = this.text;
+            if (this.text.Length > 34)
+            {
+                tempText = this.text.Substring(this.text.Length - 34, 34);
+
+            }
+            spriteBatch.DrawString(textFont, tempText, new Vector2(graphics.PreferredBackBufferWidth-250, graphics.PreferredBackBufferHeight - 20), Color.Black);
+
+            if (chatBoxText.Count > 0)
+            {
+                int temp = 0;
+
+                if (chatBoxText.Count > 11)
+                {
+                    chatBoxText.RemoveRange(0, chatBoxText.Count - 11);
+                }
+
+                foreach (string chatText in chatBoxText)
+                {
+                    spriteBatch.DrawString(textFont, chatText, new Vector2(graphics.PreferredBackBufferWidth-255, graphics.PreferredBackBufferHeight - 250 + (temp * 20)), Color.Black);
+                    temp++;
+                }
+            }
+        }
+
+        private void GameLobbyDraw()
+        {
+            spriteBatch.Begin();
+            spriteBatch.DrawString(spriteFont, "GAME LOBBY", new Vector2(10, 10), Color.White);
+            spriteBatch.DrawString(spriteFont, "Mark Ready Status - Press A", new Vector2(10, 50), Color.White);
+            spriteBatch.DrawString(spriteFont, "Exit - Press Left(Back)", new Vector2(10, 90), Color.White);
+            if (networkSession.IsHost)
+                spriteBatch.DrawString(spriteFont, "Start Game - Press Enter(Start)", new Vector2(10, 130), Color.White);
+
+            //Draw all games in the lobby
+            spriteBatch.DrawString(spriteFont, "PLAYERS IN LOBBY", new Vector2(10, 220), Color.White);
+            float drawOffSet = 0;
+            foreach (NetworkGamer networkGamer in networkSession.AllGamers)
+            {
+                spriteBatch.DrawString(spriteFont, networkGamer.Gamertag + " - " +
+                    ((networkGamer.IsReady) ? "READY" : "NOT READY") + " " +
+                    ((networkGamer.IsTalking) ? "TALKING" : ""),
+                    new Vector2(10, 260 + drawOffSet), Color.White);
+                drawOffSet += 40;
+            }
+            spriteBatch.End();
+        }
+
+        private void CreateSessionDraw()
+        {
+            if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Down) == true && menuIndex < 1)
+                menuIndex++;
+            else if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Up) == true && menuIndex > 0)
+                menuIndex--;
+
+            spriteBatch.Begin();
+            spriteBatch.DrawString(spriteFont, "CREATE SESSION", new Vector2(10, 10), Color.White);
+            if (menuIndex == 0) spriteBatch.DrawString(spriteFont, "Create Match", new Vector2(10, 50), Color.Black);
+            else spriteBatch.DrawString(spriteFont, "Create Match", new Vector2(10, 50), Color.White);
+            if (menuIndex == 1) spriteBatch.DrawString(spriteFont, "Exit", new Vector2(10, 90), Color.Black);
+            else spriteBatch.DrawString(spriteFont, "Exit", new Vector2(10, 90), Color.White);
+            spriteBatch.End();
+
+        }
+
+        private void MainMenuDraw()
+        {
+            if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Down) == true && menuIndex < 2)
+                menuIndex++;
+            else if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Up) == true && menuIndex > 0)
+                menuIndex--;
+
+            spriteBatch.Begin();
+            spriteBatch.DrawString(spriteFont, "MAIN MENU", new Vector2(10, 10), Color.White);
+            if (menuIndex == 0) spriteBatch.DrawString(spriteFont, "Create Session", new Vector2(10, 50), Color.Black);
+            else spriteBatch.DrawString(spriteFont, "Create Session", new Vector2(10, 50), Color.White);
+            if (menuIndex == 1) spriteBatch.DrawString(spriteFont, "Find Session", new Vector2(10, 90), Color.Black);
+            else spriteBatch.DrawString(spriteFont, "Find Session", new Vector2(10, 90), Color.White);
+            if (menuIndex == 2) spriteBatch.DrawString(spriteFont, "Exit", new Vector2(10, 130), Color.Black);
+            else spriteBatch.DrawString(spriteFont, "Exit", new Vector2(10, 130), Color.White);
+            spriteBatch.End();
+
+        }
+
+    }
+}

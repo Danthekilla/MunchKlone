@@ -1,0 +1,506 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <Item>
+      <Source>Fonts\SpriteFont1.spritefont</Source>
+      <Name>Fonts\SpriteFont1</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Fonts\SpriteFont1.xnb</Output>
+      <Time>2013-04-24T12:16:23.4812-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Fonts\SpriteFont2.spritefont</Source>
+      <Name>Fonts\SpriteFont2</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Fonts\SpriteFont2.xnb</Output>
+      <Time>2013-04-24T12:16:23.4812-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Fonts\SpriteFont3.spritefont</Source>
+      <Name>Fonts\SpriteFont3</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Fonts\SpriteFont3.xnb</Output>
+      <Time>2013-04-24T12:16:23.4812-04:00</Time>
+    </Item>
+    <Item>
+      <Source>UI\felt_bg.png</Source>
+      <Name>UI\felt_bg</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\UI\felt_bg.xnb</Output>
+      <Time>2013-04-24T12:16:23.6528-04:00</Time>
+    </Item>
+    <Item>
+      <Source>UI\banner.png</Source>
+      <Name>UI\banner</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\UI\banner.xnb</Output>
+      <Time>2013-04-24T12:16:23.6372-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Cards\Door.png</Source>
+      <Name>Cards\Door</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Cards\Door.xnb</Output>
+      <Time>2013-04-24T12:16:23.4344-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Cards\Treasure.png</Source>
+      <Name>Cards\Treasure</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Cards\Treasure.xnb</Output>
+      <Time>2013-04-24T12:16:23.45-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Dice\dice1.png</Source>
+      <Name>Dice\dice1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Dice\dice1.xnb</Output>
+      <Time>2013-04-24T12:16:23.45-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Dice\dice2.png</Source>
+      <Name>Dice\dice2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Dice\dice2.xnb</Output>
+      <Time>2013-04-24T12:16:23.45-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Dice\dice3.png</Source>
+      <Name>Dice\dice3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Dice\dice3.xnb</Output>
+      <Time>2013-04-24T12:16:23.45-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Dice\dice4.png</Source>
+      <Name>Dice\dice4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Dice\dice4.xnb</Output>
+      <Time>2013-04-24T12:16:23.4656-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Dice\dice5.png</Source>
+      <Name>Dice\dice5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Dice\dice5.xnb</Output>
+      <Time>2013-04-24T12:16:23.4656-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Dice\dice6.png</Source>
+      <Name>Dice\dice6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Dice\dice6.xnb</Output>
+      <Time>2013-04-24T12:16:23.4656-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Buttons\DrawFaceUpButton.png</Source>
+      <Name>Buttons\DrawFaceUpButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Buttons\DrawFaceUpButton.xnb</Output>
+      <Time>2013-04-24T12:16:23.3876-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Buttons\EquipButton.png</Source>
+      <Name>Buttons\EquipButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Buttons\EquipButton.xnb</Output>
+      <Time>2013-04-24T12:16:23.4188-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Buttons\ToBackButton.png</Source>
+      <Name>Buttons\ToBackButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Buttons\ToBackButton.xnb</Output>
+      <Time>2013-04-24T12:16:23.4188-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Buttons\ToFieldButton.png</Source>
+      <Name>Buttons\ToFieldButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Buttons\ToFieldButton.xnb</Output>
+      <Time>2013-04-24T12:16:23.4188-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Buttons\ToHandButton.png</Source>
+      <Name>Buttons\ToHandButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Buttons\ToHandButton.xnb</Output>
+      <Time>2013-04-24T12:16:23.4344-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Buttons\Untitled.png</Source>
+      <Name>Buttons\Untitled</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Buttons\Untitled.xnb</Output>
+      <Time>2013-04-24T12:16:23.4344-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Main\main_menu.png</Source>
+      <Name>Menus\Main\main_menu</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Main\main_menu.xnb</Output>
+      <Time>2013-04-24T12:16:23.606-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Login\login.png</Source>
+      <Name>Menus\Login\login</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Login\login.xnb</Output>
+      <Time>2013-04-24T12:16:23.5748-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Login\cancel.png</Source>
+      <Name>Menus\Login\cancel</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Login\cancel.xnb</Output>
+      <Time>2013-04-24T12:16:23.5748-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Lobby\lobby_menu.png</Source>
+      <Name>Menus\Lobby\lobby_menu</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Lobby\lobby_menu.xnb</Output>
+      <Time>2013-04-24T12:16:23.5436-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Lobby\lobby_menu_cantstart.png</Source>
+      <Name>Menus\Lobby\lobby_menu_cantstart</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Lobby\lobby_menu_cantstart.xnb</Output>
+      <Time>2013-04-24T12:16:23.5436-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Lobby\lobby_menu_checkbox.png</Source>
+      <Name>Menus\Lobby\lobby_menu_checkbox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Lobby\lobby_menu_checkbox.xnb</Output>
+      <Time>2013-04-24T12:16:23.5592-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Lobby\lobby_menu_menubox.png</Source>
+      <Name>Menus\Lobby\lobby_menu_menubox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Lobby\lobby_menu_menubox.xnb</Output>
+      <Time>2013-04-24T12:16:23.5592-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Lobby\lobby_menu_playercard.png</Source>
+      <Name>Menus\Lobby\lobby_menu_playercard</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Lobby\lobby_menu_playercard.xnb</Output>
+      <Time>2013-04-24T12:16:23.5592-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Lobby\lobby_menu_start.png</Source>
+      <Name>Menus\Lobby\lobby_menu_start</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Lobby\lobby_menu_start.xnb</Output>
+      <Time>2013-04-24T12:16:23.5592-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Lobby\lobby_menu_uncheckbox.png</Source>
+      <Name>Menus\Lobby\lobby_menu_uncheckbox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Lobby\lobby_menu_uncheckbox.xnb</Output>
+      <Time>2013-04-24T12:16:23.5748-04:00</Time>
+    </Item>
+    <Item>
+      <Source>LevelUpBox\LevelBox.png</Source>
+      <Name>LevelUpBox\LevelBox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\LevelUpBox\LevelBox.xnb</Output>
+      <Time>2013-04-24T12:16:23.4968-04:00</Time>
+    </Item>
+    <Item>
+      <Source>LevelUpBox\LevelDownButton.png</Source>
+      <Name>LevelUpBox\LevelDownButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\LevelUpBox\LevelDownButton.xnb</Output>
+      <Time>2013-04-24T12:16:23.4968-04:00</Time>
+    </Item>
+    <Item>
+      <Source>LevelUpBox\LevelUpButton.png</Source>
+      <Name>LevelUpBox\LevelUpButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\LevelUpBox\LevelUpButton.xnb</Output>
+      <Time>2013-04-24T12:16:23.4968-04:00</Time>
+    </Item>
+    <Item>
+      <Source>LevelUpBox\ResetButton.png</Source>
+      <Name>LevelUpBox\ResetButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\LevelUpBox\ResetButton.xnb</Output>
+      <Time>2013-04-24T12:16:23.5124-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Lobby\lobby_menu_back.png</Source>
+      <Name>Menus\Lobby\lobby_menu_back</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Lobby\lobby_menu_back.xnb</Output>
+      <Time>2013-04-24T12:16:23.5436-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Main\create_a_session.png</Source>
+      <Name>Menus\Main\create_a_session</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Main\create_a_session.xnb</Output>
+      <Time>2013-04-24T12:16:23.5904-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Main\find_a_session.png</Source>
+      <Name>Menus\Main\find_a_session</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Main\find_a_session.xnb</Output>
+      <Time>2013-04-24T12:16:23.606-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Main\exit.png</Source>
+      <Name>Menus\Main\exit</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Main\exit.xnb</Output>
+      <Time>2013-04-24T12:16:23.5904-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Session\create_a_match.png</Source>
+      <Name>Menus\Session\create_a_match</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Session\create_a_match.xnb</Output>
+      <Time>2013-04-24T12:16:23.6216-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Session\back.png</Source>
+      <Name>Menus\Session\back</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Session\back.xnb</Output>
+      <Time>2013-04-24T12:16:23.606-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Session\session_menu.png</Source>
+      <Name>Menus\Session\session_menu</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Session\session_menu.xnb</Output>
+      <Time>2013-04-24T12:16:23.6216-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Find\find_menu.png</Source>
+      <Name>Menus\Find\find_menu</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Find\find_menu.xnb</Output>
+      <Time>2013-04-24T12:16:23.5124-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Find\game_card.png</Source>
+      <Name>Menus\Find\game_card</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Find\game_card.xnb</Output>
+      <Time>2013-04-24T12:16:23.528-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Find\menubox.png</Source>
+      <Name>Menus\Find\menubox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Find\menubox.xnb</Output>
+      <Time>2013-04-24T12:16:23.528-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Find\back.png</Source>
+      <Name>Menus\Find\back</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Find\back.xnb</Output>
+      <Time>2013-04-24T12:16:23.5124-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Find\no_sessions.png</Source>
+      <Name>Menus\Find\no_sessions</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Find\no_sessions.xnb</Output>
+      <Time>2013-04-24T12:16:23.528-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Find\refresh.png</Source>
+      <Name>Menus\Find\refresh</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Find\refresh.xnb</Output>
+      <Time>2013-04-24T12:16:23.528-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Login\login_menu.png</Source>
+      <Name>Menus\Login\login_menu</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Login\login_menu.xnb</Output>
+      <Time>2013-04-24T12:16:23.5904-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Buttons\ClearField.png</Source>
+      <Name>Buttons\ClearField</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Buttons\ClearField.xnb</Output>
+      <Time>2013-04-24T12:16:23.3876-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Buttons\Discard.png</Source>
+      <Name>Buttons\Discard</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Buttons\Discard.xnb</Output>
+      <Time>2013-04-24T12:16:23.3876-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Menus\Login\create.png</Source>
+      <Name>Menus\Login\create</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Menus\Login\create.xnb</Output>
+      <Time>2013-04-24T12:16:23.5748-04:00</Time>
+    </Item>
+    <Item>
+      <Source>Buttons\ExitButton.png</Source>
+      <Name>Buttons\ExitButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\Buttons\ExitButton.xnb</Output>
+      <Time>2013-04-24T12:16:23.4188-04:00</Time>
+    </Item>
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <ContentProjectGUID>{159645F9-F3A4-4C71-B7E2-1E04B764EB27}</ContentProjectGUID>
+      <TargetPlatform>Windows</TargetPlatform>
+      <TargetProfile>HiDef</TargetProfile>
+      <BuildConfiguration>Debug</BuildConfiguration>
+      <CompressContent>false</CompressContent>
+      <RootDirectory>C:\Users\awooten1\Desktop\New folder\Munchkin\MunchkinContent\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\awooten1\Desktop\New folder\Munchkin\Munchkin\bin\x86\Debug\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Value>2011-09-01T16:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
+        <Value>2011-09-01T16:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Value>2011-09-01T16:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Value>2011-09-01T16:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Value>2011-09-01T16:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Value>2011-09-01T16:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Windows\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2013-03-29T17:28:39.6953819-04:00</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>
